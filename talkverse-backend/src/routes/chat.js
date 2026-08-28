@@ -52,7 +52,7 @@ const defaultFallbacks = {
   }
 };
 
-function extractTargetAudio(cleanText, fallbackText) {
+function extractTargetAudio(cleanText, fallbackText = "") {
   if (!cleanText) return fallbackText;
   const lines = cleanText.split("\n").map((l) => l.trim()).filter(Boolean);
   for (const line of lines) {
@@ -63,10 +63,16 @@ function extractTargetAudio(cleanText, fallbackText) {
         .replace(/\(.*?\)/gu, "")
         .replace(/\[.*?\]/gu, "")
         .trim();
-      if (match && match.length > 1) return match;
+      if (match && match.length > 0) return match;
     }
   }
-  return fallbackText;
+  // Extract the first clean non-empty line as speech target
+  const firstLine = lines[0]
+    ?.replace(/[*#`_:>🌟🇮🇳🔤📖💡]/gu, "")
+    .replace(/^.*?:/gu, "")
+    .replace(/\(.*?\)/gu, "")
+    .trim();
+  return firstLine || fallbackText;
 }
 
 router.post("/", async (req, res) => {
@@ -95,16 +101,16 @@ router.post("/", async (req, res) => {
     });
   }
 
-  const systemPrompt = `You are a high-precision AI Language Tutor for TalkVerse.
+  const systemPrompt = `You are a concise, direct South Indian language tutor for TalkVerse.
 Learner's Native Language: ${native.name} (${native.script})
 Target Language: ${target.name} (${target.script})
 
-Provide immediate, high-precision answers with no preamble. Follow this exact format:
+Provide a SHORT, CRISP response (strictly 2-3 short lines maximum). No preamble, no long paragraphs.
 
-🌟 **${target.name} (${target.script}):** [Phrase in ${target.name} script]
-🔤 **Pronunciation:** \`[Roman transliteration]\` (Phonetic in ${native.name} script: \`[guide]\`)
-📖 **${native.name} Meaning:** [Direct explanation written authentically in ${native.name} (${native.script})]
-💡 **Usage & Reply:** [1 key spoken tip & 1 natural reply phrase]`;
+Format:
+🌟 **${target.name}:** [Phrase in ${target.name} script] ([Transliteration])
+📖 **${native.name}:** [Direct meaning in ${native.name} script]
+💡 **Tip:** [1 short tip or example phrase]`;
 
   try {
     const formattedHistory = history.slice(-3).map((msg) => ({
@@ -113,14 +119,14 @@ Provide immediate, high-precision answers with no preamble. Follow this exact fo
     }));
 
     const completion = await groq.chat.completions.create({
-      model: "qwen/qwen3.6-27b",
+      model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
         ...formattedHistory,
         { role: "user", content: message }
       ],
-      temperature: 0.5,
-      max_tokens: 2500
+      temperature: 0.3,
+      max_tokens: 250
     });
 
     const raw = completion.choices?.[0]?.message?.content || "";
@@ -155,7 +161,7 @@ Provide immediate, high-precision answers with no preamble. Follow this exact fo
 
     return res.json(result);
   } catch (error) {
-    console.error("Groq AI Precision Error:", error.message);
+    console.error("Groq AI Error:", error.message);
     return res.json({
       text: fallback.text,
       audioText: fallback.targetText,

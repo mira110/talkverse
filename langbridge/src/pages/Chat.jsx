@@ -8,11 +8,11 @@ import useStore from "../store/useStore";
 import { useNavigate } from "react-router-dom";
 
 const langMeta = {
-  ta: { name: "Tamil", script: "தமிழ்", code: "ta-IN", flag: "🇮🇳" },
-  ml: { name: "Malayalam", script: "മലയാളം", code: "ml-IN", flag: "🇮🇳" },
-  kn: { name: "Kannada", script: "ಕನ್ನಡ", code: "kn-IN", flag: "🇮🇳" },
-  te: { name: "Telugu", script: "తెలుగు", code: "te-IN", flag: "🇮🇳" },
-  hi: { name: "Hindi", script: "हिन्दी", code: "hi-IN", flag: "🇮🇳" },
+  ta: { name: "Tamil", script: "தமிழ்", code: "ta-IN", flag: "🇮🇳", greeting: "வணக்கம்" },
+  ml: { name: "Malayalam", script: "മലയാളം", code: "ml-IN", flag: "🇮🇳", greeting: "നമസ്കാരം" },
+  kn: { name: "Kannada", script: "ಕನ್ನಡ", code: "kn-IN", flag: "🇮🇳", greeting: "ನಮಸ್ಕಾರ" },
+  te: { name: "Telugu", script: "తెలుగు", code: "te-IN", flag: "🇮🇳", greeting: "నమస్కారం" },
+  hi: { name: "Hindi", script: "हिन्दी", code: "hi-IN", flag: "🇮🇳", greeting: "नमस्ते" },
 };
 
 const starterPrompts = [
@@ -68,7 +68,7 @@ export default function Chat() {
       id: 1,
       role: "ai",
       text: getInitialMessage(),
-      audioText: currentTarget.name,
+      audioText: currentTarget.greeting || currentTarget.name,
       lang: currentTarget.code
     }
   ]);
@@ -117,25 +117,27 @@ export default function Chat() {
       };
 
       setMessages((prev) => [...prev, aiMessage]);
-      speak(audioText, replyLang);
+      if (audioText && audioText.length > 0) {
+        speak(audioText, replyLang);
+      }
     } catch {
       // Fallback
       setTimeout(() => {
-        const fallbackReply = `🌟 **${currentTarget.name}:** ಧನ್ಯವಾದಗಳು!\n🔤 **Pronunciation:** \`Dhanyavadagalu\`\n\n📖 **Meaning:** Thank you! Practice saying: "ನಾನು ಕಲಿಯುತ್ತಿದ್ದೇನೆ" (Naanu kaliyuttiddene - I am learning).`;
+        const fallbackReply = `🌟 **${currentTarget.name}:** ${currentTarget.greeting}!\n📖 **Meaning:** Welcome! Feel free to ask any question.`;
         const aiMessage = {
           id: Date.now() + 1,
           role: "ai",
           text: fallbackReply,
-          audioText: "ಧನ್ಯವಾದಗಳು!",
+          audioText: currentTarget.greeting,
           lang: currentTarget.code
         };
         setMessages((prev) => [...prev, aiMessage]);
-        speak("ಧನ್ಯವಾದಗಳು!", currentTarget.code);
-      }, 800);
+        speak(currentTarget.greeting, currentTarget.code);
+      }, 500);
     } finally {
       setIsAiTyping(false);
     }
-  }, [messages, nativeLang, targetLang, currentTarget.code, currentTarget.name, speak]);
+  }, [messages, nativeLang, targetLang, currentTarget.code, currentTarget.name, currentTarget.greeting, speak]);
 
   useEffect(() => {
     if (transcript) {

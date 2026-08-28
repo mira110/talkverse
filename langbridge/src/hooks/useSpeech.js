@@ -29,6 +29,18 @@ export default function useSpeech() {
     };
   }, [stop]);
 
+  // Pre-warm browser voices on load
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.getVoices();
+        };
+      }
+    }
+  }, []);
+
   // Fallback to browser SpeechSynthesis API
   const speakWithBrowserSynthesis = useCallback((cleanText, langCode = "ta-IN") => {
     if (!window.speechSynthesis) {
@@ -46,7 +58,7 @@ export default function useSpeech() {
     if (voices && voices.length > 0) {
       const langPrefix = langCode.slice(0, 2).toLowerCase();
       const matchedVoice = voices.find(
-        (v) => v.lang.toLowerCase().startsWith(langPrefix) || v.lang.toLowerCase() === langCode.toLowerCase()
+        (v) => v.lang.toLowerCase().replace(/_/g, "-").startsWith(langPrefix)
       );
       if (matchedVoice) {
         utterance.voice = matchedVoice;
