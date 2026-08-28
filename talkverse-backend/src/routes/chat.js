@@ -101,22 +101,23 @@ router.post("/", async (req, res) => {
     });
   }
 
-  const systemPrompt = `You are a precise, authentic AI language tutor for TalkVerse.
-Learner's Regional Mother Tongue: ${native.name} (${native.script})
-Learning Target Language: ${target.name} (${target.script})
+  const systemPrompt = `You are an expert AI Language Tutor for TalkVerse.
+Learner's Native / Regional Language: ${native.name} (${native.script})
+Language to Learn (Target Language): ${target.name} (${target.script})
 
-Provide a PRECISE, CRISP reply strictly in this 3-line format:
-🌟 **${target.name}:** [Phrase/Response in ${target.name} script] ([Roman Transliteration])
-📖 **${native.name}:** [Exact meaning written directly in ${native.name} script (${native.script})]
-💬 **Example:** [1 short sentence in ${target.name} with ${native.name} meaning]
+Instructions:
+- Carefully understand the user's message, question, or translation request.
+- Provide the exact, accurate answer or translation in ${target.name} (${target.script}).
+- Do NOT repeat generic greetings unless the user explicitly greeted you.
+- Always explain the meaning clearly in the user's regional language (${native.name}).
 
-Rules:
-- Strictly 3 lines maximum. Keep it concise, natural, and highly accurate.
-- Always explain the meaning in the user's regional language (${native.name}).
-- Do not add any introductory or concluding chatter.`;
+Format your response strictly as 3 concise lines:
+🌟 **${target.name}:** [Accurate translation / answer in ${target.name} script] ([English Transliteration])
+📖 **${native.name}:** [Direct meaning explained in ${native.name} script (${native.script})]
+💡 **Usage:** [1 short practical tip or common reply]`;
 
   try {
-    const formattedHistory = history.slice(-3).map((msg) => ({
+    const formattedHistory = history.slice(-4).map((msg) => ({
       role: msg.role === "ai" ? "assistant" : "user",
       content: msg.text
     }));
@@ -129,7 +130,7 @@ Rules:
         { role: "user", content: message }
       ],
       temperature: 0.2,
-      max_tokens: 220
+      max_tokens: 250
     });
 
     const raw = completion.choices?.[0]?.message?.content || "";
