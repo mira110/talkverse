@@ -31,17 +31,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load the trained PKL model
+# Load or self-heal the trained PKL model
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(SCRIPT_DIR, "indic_pronunciation_model.pkl")
 
 model_bundle = None
 if os.path.exists(MODEL_PATH):
-    with open(MODEL_PATH, "rb") as f:
-        model_bundle = pickle.load(f)
-    print(f"[+] Loaded PKL model bundle: {model_bundle.get('version')}")
-else:
-    print("[-] Warning: indic_pronunciation_model.pkl not found. Run train_model.py first.")
+    try:
+        with open(MODEL_PATH, "rb") as f:
+            model_bundle = pickle.load(f)
+        print(f"[+] Loaded PKL model bundle: {model_bundle.get('version')}")
+    except Exception as err:
+        print(f"[-] Notice loading PKL bundle ({err}). Regenerating with local scikit-learn environment...")
+        model_bundle = None
+
+if model_bundle is None:
+    try:
+        from train_model import train_and_export_model
+        train_and_export_model()
+        with open(MODEL_PATH, "rb") as f:
+            model_bundle = pickle.load(f)
+        print(f"[+] Freshly trained and loaded PKL model bundle: {model_bundle.get('version')}")
+    except Exception as e:
+        print(f"[-] Training initialization notice: {e}")
 
 @app.get("/")
 @app.get("/health")
