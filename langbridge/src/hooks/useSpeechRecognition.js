@@ -115,13 +115,16 @@ export default function useSpeechRecognition(defaultLangCode = "ta-IN") {
         };
 
         recognition.onresult = (event) => {
-          const results = event.results;
-          if (results.length > 0) {
-            const topResult = results[0][0];
-            const text = topResult.transcript;
-            const conf = topResult.confidence ? Math.round(topResult.confidence * 100) : 85;
-            setTranscript(text);
-            setConfidence(conf);
+          let accumulated = "";
+          for (let i = 0; i < event.results.length; i++) {
+            accumulated += event.results[i][0].transcript;
+          }
+          const cleaned = accumulated.trim();
+          if (cleaned) {
+            setTranscript(cleaned);
+          }
+          if (event.results[0]?.[0]?.confidence) {
+            setConfidence(Math.round(event.results[0][0].confidence * 100));
           }
         };
 

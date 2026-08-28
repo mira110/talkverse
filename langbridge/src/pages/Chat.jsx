@@ -139,17 +139,37 @@ export default function Chat() {
     }
   }, [messages, nativeLang, targetLang, currentTarget.code, currentTarget.name, currentTarget.greeting, speak]);
 
+  const lastProcessedTranscriptRef = useRef("");
+  const wasListeningRef = useRef(false);
+
+  // Live feedback: show words in input field in real time as the user speaks
   useEffect(() => {
-    if (transcript) {
-      handleSend(transcript);
+    if (isListening && transcript) {
+      setInput(transcript);
     }
-  }, [transcript, handleSend]);
+  }, [isListening, transcript]);
+
+  // When recording ends (after full sentence), dispatch the complete analyzed text
+  useEffect(() => {
+    if (wasListeningRef.current && !isListening && transcript) {
+      const fullSentence = transcript.trim();
+      if (fullSentence && fullSentence !== lastProcessedTranscriptRef.current && !isAiTyping) {
+        lastProcessedTranscriptRef.current = fullSentence;
+        setInput("");
+        handleSend(fullSentence);
+      }
+    }
+    wasListeningRef.current = isListening;
+  }, [isListening, transcript, isAiTyping, handleSend]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!input.trim() || isAiTyping) return;
     playClick();
-    handleSend(input.trim());
+    const text = input.trim();
+    lastProcessedTranscriptRef.current = text;
+    setInput("");
+    handleSend(text);
   };
 
   const handleResetChat = () => {
@@ -160,7 +180,7 @@ export default function Chat() {
         id: Date.now(),
         role: "ai",
         text: getInitialMessage(),
-        audioText: currentTarget.name,
+        audioText: currentTarget.greeting || currentTarget.name,
         lang: currentTarget.code
       }
     ]);
@@ -170,8 +190,16 @@ export default function Chat() {
     if (isListening) {
       playMicStop();
       stopListening();
+      if (input.trim() && input.trim() !== lastProcessedTranscriptRef.current && !isAiTyping) {
+        const text = input.trim();
+        lastProcessedTranscriptRef.current = text;
+        setInput("");
+        handleSend(text);
+      }
     } else {
       playMicStart();
+      setInput("");
+      lastProcessedTranscriptRef.current = "";
       startListening(currentMicLangCode);
     }
   };
