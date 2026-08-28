@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import chatRouter from "./src/routes/chat.js";
 import authRouter from "./src/routes/auth.js";
@@ -162,14 +163,14 @@ app.get("/api/lessons/:id", (req, res) => {
   }
 });
 
-// Serve frontend static build files
+// Serve frontend static build files if present
 const distPath = path.join(__dirname, "../langbridge/dist");
-app.use(express.static(distPath));
-
-// SPA Catch-all middleware to serve index.html for all frontend routes
-app.use((req, res) => {
-  res.sendFile(path.join(distPath, "index.html"));
-});
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.use((req, res) => {
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 
