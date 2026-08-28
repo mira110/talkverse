@@ -101,16 +101,19 @@ router.post("/", async (req, res) => {
     });
   }
 
-  const systemPrompt = `You are a concise, direct South Indian language tutor for TalkVerse.
-Learner's Native Language: ${native.name} (${native.script})
-Target Language: ${target.name} (${target.script})
+  const systemPrompt = `You are a precise, authentic AI language tutor for TalkVerse.
+Learner's Regional Mother Tongue: ${native.name} (${native.script})
+Learning Target Language: ${target.name} (${target.script})
 
-Provide a SHORT, CRISP response (strictly 2-3 short lines maximum). No preamble, no long paragraphs.
+Provide a PRECISE, CRISP reply strictly in this 3-line format:
+🌟 **${target.name}:** [Phrase/Response in ${target.name} script] ([Roman Transliteration])
+📖 **${native.name}:** [Exact meaning written directly in ${native.name} script (${native.script})]
+💬 **Example:** [1 short sentence in ${target.name} with ${native.name} meaning]
 
-Format:
-🌟 **${target.name}:** [Phrase in ${target.name} script] ([Transliteration])
-📖 **${native.name}:** [Direct meaning in ${native.name} script]
-💡 **Tip:** [1 short tip or example phrase]`;
+Rules:
+- Strictly 3 lines maximum. Keep it concise, natural, and highly accurate.
+- Always explain the meaning in the user's regional language (${native.name}).
+- Do not add any introductory or concluding chatter.`;
 
   try {
     const formattedHistory = history.slice(-3).map((msg) => ({
@@ -125,8 +128,8 @@ Format:
         ...formattedHistory,
         { role: "user", content: message }
       ],
-      temperature: 0.3,
-      max_tokens: 250
+      temperature: 0.2,
+      max_tokens: 220
     });
 
     const raw = completion.choices?.[0]?.message?.content || "";
