@@ -1,0 +1,21 @@
+{
+  "id": "ta-hi-03",
+  "title": "Family Members",
+  "targetLang": "hi",
+  "targetLangCode": "hi-IN",
+  "sourceLang": "ta",
+  "words": [
+    { "word": "माँ", "transliteration": "Maa", "meaningInSource": "அம்மா", "phoneticHint": "mah" },
+    { "word": "पिता", "transliteration": "Pita", "meaningInSource": "அப்பா", "phoneticHint": "pi-tah" },
+    { "word": "भाई", "transliteration": "Bhai", "meaningInSource": "அண்ணா/தம்பி", "phoneticHint": "bhay" },
+    { "word": "बहन", "transliteration": "Behan", "meaningInSource": "அக்கா/தங்கை", "phoneticHint": "bay-hun" },
+    { "word": "बेटा", "transliteration": "Beta", "meaningInSource": "மகன்", "phoneticHint": "bay-tah" }
+  ],
+  "quiz": [
+    { "question": "அம்மா", "options": ["पिता", "भाई", "बहन", "माँ"], "correctIndex": 3 },
+    { "question": "அப்பா", "options": ["माँ", "पिता", "भाई", "बहन"], "correctIndex": 1 },
+    { "question": "அண்ணா", "options": ["बहन", "माँ", "भाई", "बेटा"], "correctIndex": 2 },
+    { "question": "தங்கை", "options": ["भाई", "बहन", "पिता", "माँ"], "correctIndex": 1 },
+    { "question": "மகன்", "options": ["बहन", "बेटा", "पिता", "भाई"], "correctIndex": 1 }
+  ]
+}

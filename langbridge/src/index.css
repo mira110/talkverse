@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #E8A317;
+  --color-primary-light: #F5B731;
+  --color-primary-dark: #C78C0E;
+  --color-secondary: #D4621A;
+  --color-accent: #C0392B;
+  --color-dark: #1C1410;
+  --color-dark-card: #2A2018;
+  --color-dark-border: #3D3028;
+  --color-light: #FFFBF5;
+  --color-light-card: #FFFFFF;
+  --color-light-border: #F0E6D6;
+  --color-text-main: #2C1810;
+  --color-text-muted: #8B7355;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.07;
+  }
+  90% {
+    opacity: 0.07;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.floating-letter {
+  position: fixed;
+  font-size: 3rem;
+  color: #2C1810;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatUp linear infinite;
+  font-weight: 700;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes starPop {
+  0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+  70% { transform: scale(1.3) rotate(15deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.animate-star-pop {
+  animation: starPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}

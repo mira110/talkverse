@@ -1,0 +1,16 @@
+{
+  "name": "south-indian-tutor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TalkVerse - Multi-Mode Indic Language Platform with Python PKL Pronunciation Model",
+  "scripts": {
+    "dev": "node -e \"const { spawn } = require('child_process'); const ai = spawn('python', ['ai_engine/app.py'], { stdio: 'inherit', shell: true }); const b = spawn('npm', ['start'], { cwd: './talkverse-backend', stdio: 'inherit', shell: true }); const f = spawn('npm', ['run', 'dev'], { cwd: './langbridge', stdio: 'inherit', shell: true }); process.on('SIGINT', () => { ai.kill(); b.kill(); f.kill(); process.exit(); });\"",
+    "frontend": "npm run dev --prefix langbridge",
+    "backend": "npm start --prefix talkverse-backend",
+    "ai:serve": "python ai_engine/app.py",
+    "ai:train": "python ai_engine/train_model.py",
+    "start": "npm start --prefix talkverse-backend",
+    "build": "npm run build --prefix langbridge",
+    "lint": "npm run lint --prefix langbridge"
+  }
+}

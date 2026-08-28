@@ -1,0 +1,22 @@
+{
+  "id": "ta-hi-01",
+  "title": "Basic Greetings",
+  "targetLang": "hi",
+  "targetLangCode": "hi-IN",
+  "sourceLang": "ta",
+  "words": [
+    { "word": "नमस्ते", "transliteration": "Namaste", "meaningInSource": "வணக்கம்", "phoneticHint": "nuh-mus-TAY" },
+    { "word": "शुभ प्रभात", "transliteration": "Shubh Prabhat", "meaningInSource": "காலை வணக்கம்", "phoneticHint": "shoob pruh-BHAAT" },
+    { "word": "धन्यवाद", "transliteration": "Dhanyavaad", "meaningInSource": "நன்றி", "phoneticHint": "dhun-ya-VAAD" },
+    { "word": "हाँ", "transliteration": "Haan", "meaningInSource": "ஆம்", "phoneticHint": "haan" },
+    { "word": "नहीं", "transliteration": "Nahin", "meaningInSource": "இல்லை", "phoneticHint": "nuh-HEEN" },
+    { "word": "शुभ रात्रि", "transliteration": "Shubh Ratri", "meaningInSource": "இரவு வணக்கம்", "phoneticHint": "shoob rah-TREE" }
+  ],
+  "quiz": [
+    { "question": "வணக்கம்", "options": ["नहीं", "धन्यवाद", "नमस्ते", "शुभ प्रभात"], "correctIndex": 2 },
+    { "question": "நன்றி", "options": ["धन्यवाद", "हाँ", "नमस्ते", "नहीं"], "correctIndex": 0 },
+    { "question": "இல்லை", "options": ["हाँ", "नहीं", "धन्यवाद", "नमस्ते"], "correctIndex": 1 },
+    { "question": "ஆம்", "options": ["नहीं", "धन्यवाद", "नमस्ते", "हाँ"], "correctIndex": 3 },
+    { "question": "இரவு வணக்கம்", "options": ["शुभ प्रभात", "नमस्ते", "शुभ रात्रि", "धन्यवाद"], "correctIndex": 2 }
+  ]
+}

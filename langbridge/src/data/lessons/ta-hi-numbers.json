@@ -1,0 +1,21 @@
+{
+  "id": "ta-hi-02",
+  "title": "Numbers 1-10",
+  "targetLang": "hi",
+  "targetLangCode": "hi-IN",
+  "sourceLang": "ta",
+  "words": [
+    { "word": "एक", "transliteration": "Ek", "meaningInSource": "ஒன்று", "phoneticHint": "ayk" },
+    { "word": "दो", "transliteration": "Do", "meaningInSource": "இரண்டு", "phoneticHint": "doh" },
+    { "word": "तीन", "transliteration": "Teen", "meaningInSource": "மூன்று", "phoneticHint": "teen" },
+    { "word": "पाँच", "transliteration": "Paanch", "meaningInSource": "ஐந்து", "phoneticHint": "pah-anch" },
+    { "word": "दस", "transliteration": "Das", "meaningInSource": "பத்து", "phoneticHint": "dus" }
+  ],
+  "quiz": [
+    { "question": "மூன்று", "options": ["दो", "एक", "तीन", "दस"], "correctIndex": 2 },
+    { "question": "பத்து", "options": ["पाँच", "दस", "एक", "दो"], "correctIndex": 1 },
+    { "question": "இரண்டு", "options": ["दस", "तीन", "दो", "पाँच"], "correctIndex": 2 },
+    { "question": "ஒன்று", "options": ["दस", "तीन", "पाँच", "एक"], "correctIndex": 3 },
+    { "question": "ஐந்து", "options": ["एक", "दो", "पाँच", "दस"], "correctIndex": 2 }
+  ]
+}

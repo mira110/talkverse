@@ -1,0 +1,202 @@
+{
+  "users": [
+    {
+      "id": "usr_1787647504464_rj2xu89me",
+      "name": "Miraclin Learner",
+      "email": "miraclin@indic.com",
+      "passwordHash": "$2b$10$rX2QveSKtidbtVr3nmvkKOe6KdSv8m8KMwgYdwCejwxW3NS/hBRFS",
+      "avatar_url": null,
+      "authProvider": "email",
+      "createdAt": "2026-08-25T08:45:04.464Z",
+      "lastLoginAt": "2026-08-25T08:45:26.096Z",
+      "updatedAt": "2026-08-25T08:45:26.097Z"
+    },
+    {
+      "id": "9Cne4PsvYQWK6YqQXBEycJ4W0ko2",
+      "name": "Miraclin k",
+      "email": "miraclinkulandaisamy@gmail.com",
+      "passwordHash": null,
+      "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocI2xyp7z0MhUESzFqi1eRWCheFPfuUez5dok6lV1BxMNd-LC_W-=s96-c",
+      "authProvider": "firebase",
+      "createdAt": "2026-08-25T09:07:47.715Z",
+      "lastLoginAt": "2026-08-28T06:08:49.905Z",
+      "updatedAt": "2026-08-28T06:08:50.184Z"
+    },
+    {
+      "id": "6a8d69819e81ba9a26072f9a",
+      "name": "Miraclin Atlas User",
+      "email": "miraclin.atlas@gmail.com",
+      "passwordHash": "$2b$10$YWsR5BJcTUG4YV8mxtKlpO2a6jHrCes5DHB2QYEx2/7xMLwPXQxoO",
+      "avatar_url": null,
+      "authProvider": "email",
+      "createdAt": "2026-08-25T10:08:01.911Z",
+      "lastLoginAt": "2026-08-25T10:08:01.912Z"
+    },
+    {
+      "id": "6a8d6a569e81ba9a26072f9b",
+      "name": "Gokula",
+      "email": "gokuladarshini47@gmail.com",
+      "passwordHash": "$2b$10$ocVDIDzMuRK0K78XaCzkTu3zXRQ1MsZUV5iq/hRCkrnswgPC.JgDG",
+      "avatar_url": null,
+      "authProvider": "firebase",
+      "createdAt": "2026-08-25T10:11:34.141Z",
+      "lastLoginAt": "2026-08-28T05:52:23.173Z",
+      "updatedAt": "2026-08-28T05:52:23.175Z"
+    },
+    {
+      "id": "jo4tuTSH9yRhg36V3Pv9lOE7Kip1",
+      "name": "miraclin",
+      "email": "miraclin.techpro@gmail.com",
+      "passwordHash": null,
+      "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocK7ed0brkxUrx_7rCsGTC3NpYVbjLZIcIJavQiVd71rcT1E5g=s96-c",
+      "authProvider": "firebase",
+      "createdAt": "2026-08-27T04:13:14.414Z",
+      "lastLoginAt": "2026-08-27T04:51:49.173Z",
+      "updatedAt": "2026-08-27T04:51:49.174Z"
+    },
+    {
+      "id": "usr_1787806279402_4ped214ny",
+      "name": "Miraaa",
+      "email": "gopikaramji@gmail.com",
+      "passwordHash": "$2b$10$7Z7nub0iFZTRdW3gGrzTF.TqEwJbmr9X5WE7SQOSL4fKav21lJGs6",
+      "avatar_url": null,
+      "authProvider": "email",
+      "createdAt": "2026-08-27T04:51:19.402Z",
+      "lastLoginAt": "2026-08-27T04:51:19.402Z"
+    },
+    {
+      "id": "sNRrhlmcHaR7yDXWCSFy5aGh09u1",
+      "name": "MIRACLIN K",
+      "email": "miraclin.k.aiml.2024@snsct.org",
+      "passwordHash": null,
+      "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocKEt2BK1yioQhCVfXbQzrWgQZ-hsO8mwkRM0T8ecaqXwqQqmA=s96-c",
+      "authProvider": "firebase",
+      "createdAt": "2026-08-27T05:09:01.596Z",
+      "lastLoginAt": "2026-08-27T08:34:13.908Z",
+      "updatedAt": "2026-08-27T08:34:14.142Z"
+    },
+    {
+      "id": "bw05xkgyYAYErElVimdY1ytVQdl2",
+      "name": "Miraclin K",
+      "email": "miraclin15072006@gmail.com",
+      "passwordHash": null,
+      "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocIxRsYaMf-5c1Jk3JpOBUIp_RaN3e7Ibf0q0D_OB8NB5bU1zQ=s96-c",
+      "authProvider": "firebase",
+      "createdAt": "2026-08-28T04:35:50.975Z",
+      "lastLoginAt": "2026-08-28T04:35:50.975Z"
+    }
+  ],
+  "user_progress": [
+    {
+      "email": "miraclin@indic.com",
+      "xp": 0,
+      "streak": 1,
+      "level": 1,
+      "wordsLearned": 0,
+      "completedLessons": [],
+      "nativeLang": "ta",
+      "targetLang": "kn",
+      "updatedAt": "2026-08-25T08:45:04.465Z"
+    },
+    {
+      "email": "miraclinkulandaisamy@gmail.com",
+      "xp": 220,
+      "streak": 6,
+      "level": 3,
+      "wordsLearned": 38,
+      "completedLessons": [
+        "ta-kn-01"
+      ],
+      "nativeLang": "ml",
+      "targetLang": "ta",
+      "updatedAt": "2026-08-27T04:53:44.989Z"
+    },
+    {
+      "email": "miraclin.atlas@gmail.com",
+      "xp": 0,
+      "streak": 1,
+      "level": 1,
+      "wordsLearned": 0,
+      "completedLessons": [],
+      "nativeLang": "ta",
+      "targetLang": "kn",
+      "updatedAt": "2026-08-25T10:08:01.957Z"
+    },
+    {
+      "email": "gokuladarshini47@gmail.com",
+      "xp": 220,
+      "streak": 6,
+      "level": 3,
+      "wordsLearned": 38,
+      "todayXP": 0,
+      "completedLessons": [
+        "ta-kn-01"
+      ],
+      "nativeLang": "ta",
+      "targetLang": "hi",
+      "hasSelectedLanguages": true,
+      "updatedAt": "2026-08-28T06:07:15.277Z"
+    },
+    {
+      "email": "miraclin.techpro@gmail.com",
+      "xp": 220,
+      "streak": 6,
+      "level": 3,
+      "wordsLearned": 38,
+      "completedLessons": [
+        "ta-kn-01"
+      ],
+      "nativeLang": "ta",
+      "targetLang": "hi",
+      "updatedAt": "2026-08-27T04:13:37.675Z"
+    },
+    {
+      "email": "guest@talkverse.com",
+      "xp": 0,
+      "streak": 1,
+      "level": 1,
+      "wordsLearned": 0,
+      "completedLessons": [],
+      "nativeLang": "ta",
+      "targetLang": "kn",
+      "updatedAt": "2026-08-27T04:27:04.501Z"
+    },
+    {
+      "email": "gopikaramji@gmail.com",
+      "xp": 0,
+      "streak": 1,
+      "level": 1,
+      "wordsLearned": 0,
+      "completedLessons": [],
+      "nativeLang": "ta",
+      "targetLang": "kn",
+      "updatedAt": "2026-08-27T04:51:19.405Z"
+    },
+    {
+      "email": "miraclin.k.aiml.2024@snsct.org",
+      "xp": 0,
+      "streak": 1,
+      "level": 1,
+      "wordsLearned": 0,
+      "todayXP": 0,
+      "completedLessons": [],
+      "nativeLang": "ta",
+      "targetLang": "kn",
+      "hasSelectedLanguages": false,
+      "updatedAt": "2026-08-27T08:34:25.037Z"
+    },
+    {
+      "email": "miraclin15072006@gmail.com",
+      "xp": 0,
+      "streak": 1,
+      "level": 1,
+      "wordsLearned": 0,
+      "todayXP": 0,
+      "completedLessons": [],
+      "nativeLang": "ta",
+      "targetLang": "hi",
+      "hasSelectedLanguages": true,
+      "updatedAt": "2026-08-28T04:36:07.777Z"
+    }
+  ]
+}
