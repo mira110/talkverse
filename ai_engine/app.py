@@ -2,8 +2,14 @@ import os
 import io
 import sys
 import pickle
+import wave
 import numpy as np
-import soundfile as sf
+
+try:
+    import soundfile as sf
+except Exception:
+    sf = None
+
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from train_model import extract_audio_features
@@ -37,6 +43,7 @@ if os.path.exists(MODEL_PATH):
 else:
     print("[-] Warning: indic_pronunciation_model.pkl not found. Run train_model.py first.")
 
+@app.get("/")
 @app.get("/health")
 def health():
     return {
@@ -62,13 +69,28 @@ async def predict_pronunciation(
         if len(audio_bytes) < 100:
             raise HTTPException(status_code=400, detail="Audio file is empty or too short.")
 
-        # Decode audio waveform using soundfile
-        try:
-            signal, sr = sf.read(io.BytesIO(audio_bytes))
-        except Exception:
-            # Fallback for raw PCM or float buffer conversion
-            signal = np.frombuffer(audio_bytes, dtype=np.int16).astype(np.float32) / 32768.0
-            sr = 22050
+        # Decode audio waveform using soundfile or built-in wave module
+        signal = None
+        sr = 22050
+        if sf is not None:
+            try:
+                signal, sr = sf.read(io.BytesIO(audio_bytes))
+            except Exception:
+                signal = None
+
+        if signal is None:
+            try:
+                with wave.open(io.BytesIO(audio_bytes), "rb") as wf:
+                    sr = wf.getframerate()
+                    n_frames = wf.getnframes()
+                    frames = wf.readframes(n_frames)
+                    if wf.getsampwidth() == 2:
+                        signal = np.frombuffer(frames, dtype=np.int16).astype(np.float32) / 32768.0
+                    else:
+                        signal = np.frombuffer(frames, dtype=np.uint8).astype(np.float32) / 128.0 - 1.0
+            except Exception:
+                signal = np.frombuffer(audio_bytes, dtype=np.int16).astype(np.float32) / 32768.0
+                sr = 22050
 
         # Convert stereo to mono
         if len(signal.shape) > 1:
@@ -123,4 +145,5 @@ async def predict_pronunciation(
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
