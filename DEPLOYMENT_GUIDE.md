@@ -77,6 +77,7 @@ The Express server coordinates lessons, dialogues, speech forwarding, and authen
    | `PORT` | `5000` |
    | `PYTHON_ML_URL` | `https://talkverse-ai-engine.onrender.com` *(from Step 2)* |
    | `MONGODB_URI` | `mongodb+srv://...` *(from your talkverse-backend/.env)* |
+   | `GEMINI_API_KEY` | *(Optional) Your Google Gemini API Key* |
    | `VITE_GROQ_API_KEY` | `gsk_...` *(from your talkverse-backend/.env)* |
    | `SUPABASE_URL` | `https://zrerhdcbcfhokkmihyth.supabase.co` |
    | `SUPABASE_ANON_KEY` | `eyJhbGciOi...` |

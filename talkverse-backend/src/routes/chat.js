@@ -6,7 +6,9 @@ dotenv.config();
 
 const router = express.Router();
 
+const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.VITE_GEMINI_API_KEY;
 const groqApiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY;
+
 let groq = null;
 if (groqApiKey) {
   groq = new Groq({ apiKey: groqApiKey });
@@ -58,21 +60,108 @@ function extractTargetAudio(cleanText, fallbackText = "") {
   for (const line of lines) {
     if (line.includes("**") || line.startsWith("🌟") || line.startsWith("🇮🇳")) {
       const match = line
-        .replace(/[*#`_:>🌟🇮🇳🔤📖💡]/gu, "")
-        .replace(/^.*?:/gu, "")
+        .replace(/^.*?:\s*/gu, "")
         .replace(/\(.*?\)/gu, "")
         .replace(/\[.*?\]/gu, "")
+        .replace(/[*#`_:>🌟🇮🇳🔤📖💡]/gu, "")
         .trim();
       if (match && match.length > 0) return match;
     }
   }
   // Extract the first clean non-empty line as speech target
   const firstLine = lines[0]
-    ?.replace(/[*#`_:>🌟🇮🇳🔤📖💡]/gu, "")
-    .replace(/^.*?:/gu, "")
+    ?.replace(/^.*?:\s*/gu, "")
     .replace(/\(.*?\)/gu, "")
+    .replace(/\[.*?\]/gu, "")
+    .replace(/[*#`_:>🌟🇮🇳🔤📖💡]/gu, "")
     .trim();
   return firstLine || fallbackText;
+}
+
+// Call Google Gemini API with fallback models
+async function callGemini(apiKey, systemInstruction, history, message) {
+  const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
+  const formattedContents = [
+    ...history.slice(-4).map((msg) => ({
+      role: msg.role === "ai" || msg.role === "model" ? "model" : "user",
+      parts: [{ text: msg.text }]
+    })),
+    {
+      role: "user",
+      parts: [{ text: message }]
+    }
+  ];
+
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const payload = {
+        systemInstruction: {
+          parts: [{ text: systemInstruction }]
+        },
+        contents: formattedContents,
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 500
+        }
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.warn(`Gemini model ${model} HTTP ${response.status}:`, errorText);
+        continue;
+      }
+
+      const data = await response.json();
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+      if (reply) return reply;
+    } catch (err) {
+      console.warn(`Gemini model ${model} error:`, err.message);
+    }
+  }
+  return "";
+}
+
+// Call Groq API with fallback models
+async function callGroq(groqClient, systemInstruction, history, message) {
+  const CANDIDATE_MODELS = [
+    "qwen/qwen3.8-27b",
+    "openai/gpt-oss-120b",
+    "qwen/qwen3.6-27b",
+    "groq/compound-mini"
+  ];
+
+  const formattedHistory = history.slice(-4).map((msg) => ({
+    role: msg.role === "ai" ? "assistant" : "user",
+    content: msg.text
+  }));
+
+  for (const model of CANDIDATE_MODELS) {
+    try {
+      const completion = await groqClient.chat.completions.create({
+        model,
+        messages: [
+          { role: "system", content: systemInstruction },
+          ...formattedHistory,
+          { role: "user", content: message }
+        ],
+        temperature: 0.2,
+        max_tokens: 450
+      });
+
+      const content = completion.choices?.[0]?.message?.content?.trim() || "";
+      if (content) return content;
+    } catch (err) {
+      console.warn(`Groq model ${model} error:`, err.message);
+    }
+  }
+  return "";
 }
 
 router.post("/", async (req, res) => {
@@ -93,14 +182,6 @@ router.post("/", async (req, res) => {
     return res.json({ ...cached, cached: true });
   }
 
-  if (!groq) {
-    return res.json({
-      text: fallback.text,
-      audioText: fallback.targetText,
-      lang: target.code
-    });
-  }
-
   const systemPrompt = `You are an expert AI Language Tutor for TalkVerse.
 Learner's Native / Regional Language: ${native.name} (${native.script})
 Language to Learn (Target Language): ${target.name} (${target.script})
@@ -117,32 +198,32 @@ Format your response strictly as 3 concise lines:
 💡 **Usage:** [1 short practical tip or common reply]`;
 
   try {
-    const formattedHistory = history.slice(-4).map((msg) => ({
-      role: msg.role === "ai" ? "assistant" : "user",
-      content: msg.text
-    }));
+    let raw = "";
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...formattedHistory,
-        { role: "user", content: message }
-      ],
-      temperature: 0.2,
-      max_tokens: 250
-    });
+    // 1. Try Gemini if API key is provided
+    if (geminiApiKey) {
+      raw = await callGemini(geminiApiKey, systemPrompt, history, message);
+    }
 
-    const raw = completion.choices?.[0]?.message?.content || "";
+    // 2. Fallback to Groq if Gemini did not respond or is not configured
+    if (!raw && groq) {
+      raw = await callGroq(groq, systemPrompt, history, message);
+    }
+
+    if (!raw) {
+      return res.json({
+        text: fallback.text,
+        audioText: fallback.targetText,
+        lang: target.code
+      });
+    }
+
     let cleanReply = raw;
     if (cleanReply.includes("<think>")) {
+      cleanReply = cleanReply.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
       if (cleanReply.includes("</think>")) {
-        cleanReply = cleanReply.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
-      } else {
         const parts = cleanReply.split("</think>");
-        if (parts.length > 1) {
-          cleanReply = parts[1].trim();
-        }
+        cleanReply = parts[parts.length - 1].trim();
       }
     }
     if (!cleanReply || cleanReply.length < 5) {
@@ -156,7 +237,7 @@ Format your response strictly as 3 concise lines:
       lang: target.code
     };
 
-    // Save to Cache
+    // Save to Cache only for successful dynamic AI responses
     if (aiResponseCache.size > MAX_CACHE_SIZE) {
       const firstKey = aiResponseCache.keys().next().value;
       aiResponseCache.delete(firstKey);
@@ -165,7 +246,7 @@ Format your response strictly as 3 concise lines:
 
     return res.json(result);
   } catch (error) {
-    console.error("Groq AI Error:", error.message);
+    console.error("Chat AI Error:", error.message);
     return res.json({
       text: fallback.text,
       audioText: fallback.targetText,
